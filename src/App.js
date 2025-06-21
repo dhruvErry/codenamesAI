@@ -1,24 +1,25 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import JoinForm  from './components/JoinForm';
+import Game from './components/Game';
+import Board from './components/Board';
+import Card from './components/Card';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/join" element={<JoinForm/>} />
+        <Route path="/game" element={<Game/>} />
+        <Route path="/board" element={<Board/>} />
+        <Route path="/card" element={<Card/>} />
+      </Routes>
+    </BrowserRouter>
+    </>
   );
 }
 
