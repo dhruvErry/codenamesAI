@@ -14,17 +14,15 @@ function JoinForm () {
         setName(e.target[1].value)
         // socket.emit("join room", (room, name))
         navigate('/game')
-    }
-
-    return (
-        <div className = "containerForm">
-            <div className = 'entryForm'>
-                <form onSubmit = {handleSubmit}>
+    }    return (
+        <div className = "container-form">
+            <div className = 'entry-form'>
+                <form className="join-form" onSubmit = {handleSubmit}>
                     <label htmlFor="room">Room</label>
-                    <input placeholder = "Enter Room" id = "room" required/>
+                    <input className="form-input" placeholder = "Enter Room" id = "room" required/>
                     <label htmlFor="name">Name</label>
-                    <input placeholder = "Enter Your Name" id = "name" required/>
-                    <button type="submit">Create or Join Game</button>
+                    <input className="form-input" placeholder = "Enter Your Name" id = "name" required/>
+                    <button className="form-button" type="submit">Create or Join Game</button>
                 </form>
             </div>
         </div>

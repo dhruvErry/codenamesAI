@@ -1,14 +1,14 @@
-.entryForm {
+.entry-form {
     background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    padding: 20px 20px;
+    border-radius: 0.9375em; /* 15px */
+    box-shadow: 0 0 1.25em rgba(0, 0, 0, 0.2); /* 20px */
+    padding: 1.25em 1.25em; /* 20px */
     transition: transform 0.2s;
-    width: 500px;
+    width: 31.25em; /* 500px */
     text-align: center;
 }
 
-.containerForm{
+.container-form {
     background-color: #4caf50;
     display: flex;
     justify-content: center;
@@ -16,31 +16,32 @@
     height: 100vh;
 }
 
-input {
+.form-input {
     display: block;
     width: 100%;
-    padding: 8px;
+    padding: 0.5em; /* 8px */
     box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 12px;
-    margin: 5px;
+    border: 0.0625em solid #ddd; /* 1px */
+    border-radius: 0.375em; /* 6px */
+    font-size: 0.75em; /* 12px */
+    margin: 0.3125em; /* 5px */
 }
 
-button {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
+.form-button {
+    padding: 0.9375em; /* 15px */
+    border-radius: 0.625em; /* 10px */
+    margin-top: 0.9375em; /* 15px */
     border: none;
     color: white;
     cursor: pointer;
     background-color: #4caf50;
     width: 40%;
-    font-size: 16px;
+    font-size: 1em; /* 16px */
 }
-textarea {
+
+.form-textarea {
     resize: none;
     width: 98%;
-    min-height: 100px;
-    max-height: 150px;
+    min-height: 6.25em; /* 100px */
+    max-height: 9.375em; /* 150px */
 }

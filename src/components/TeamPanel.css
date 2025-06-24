@@ -1,0 +1,17 @@
+.container-team {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.score{
+    padding: 1em;
+}
+
+.red {
+    color: red;
+}
+
+.blue {
+    color: blue;
+}

@@ -1,0 +1,53 @@
+.clue-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.clue-form {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+}
+
+.clue-input {
+    padding: 0.2em 1em;
+    margin-top: 5%;
+    font-size: 1.2em;
+}
+
+.clue-input[type="text"] {
+    width: 11em;
+    margin-right: 2%;
+}
+
+.clue-input[type="number"] {
+    width: 4em;
+}
+
+.clue-button {
+    padding: 0.2em 1em;
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 8em;
+    font-size: 1.2em;
+    width: auto;
+    white-space: nowrap;
+}
+
+.clue-display {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.clue-input,
+.clue-button {
+  font-family: 'LittleMicroSans', sans-serif;
+}

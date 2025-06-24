@@ -1,13 +1,15 @@
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-}
+/* html, body, #root {
+height: 100%;
+margin: 0;
+overflow: hidden;
+} */
 
-.containerBoard {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-	/* grid-gap: 10px; */
-    height: 100%;
+.container-board {
+  display: grid;
+  grid-template-columns: repeat(5, 13em);
+  grid-template-rows: repeat(5, 8em);
+  width: fit-content;
+  gap: 0.4em;
+  /* border: .05em solid black; */
+  border-radius: .5em;
 }
