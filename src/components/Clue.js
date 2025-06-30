@@ -30,7 +30,7 @@ function Clue () {
 
     return (
         <div className = 'clue-display'>
-            {clue.toUpperCase()} {number}
+            {clue.toUpperCase()} {'\u00A0'} {number}
         </div>
     )
 }

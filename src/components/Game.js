@@ -4,6 +4,7 @@ import TeamPanel from './TeamPanel';
 import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
+import { io } from 'socket.io-client';
 
 function Game() {
     const [cards, setCards] = useState([]);
@@ -89,16 +90,27 @@ function Game() {
                     // onReset={() => {}}
                 />
             </div>
-            <div className= 'board'>
-                <Board
-                    cards={cards}
-                    spy={spy}
-                    onCardClick={handleCardClick}
-                    onCardRightClick={handleCardRightClick}
-                />
+            <div className='vertical-container'>
+                <div className= 'board'>
+                    <Board
+                        cards={cards}
+                        spy={spy}
+                        onCardClick={handleCardClick}
+                        onCardRightClick={handleCardRightClick}
+                    />
+                </div>
+                <div className= 'clue'>
+                    <Clue
+                    />
+                </div>
             </div>
-            <div className= 'clue'>
-                <Clue
+            
+            <div className= 'team'>
+                <TeamPanel
+                    redLeft={redLeft} 
+                    blueLeft={blueLeft}    
+                    // onEndTurn={() => {}}
+                    // onReset={() => {}}
                 />
             </div>
         </div>

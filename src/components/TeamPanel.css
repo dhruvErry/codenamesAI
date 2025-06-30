@@ -1,17 +1,34 @@
 .container-team {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-content: center;
+    flex-direction: column;
+    height: 100%;
 }
 
-.score{
+.team-names {
+    display: flex;
+    flex-direction: column;
+}
+
+.score {
     padding: 1em;
+    color: white;
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
 }
 
-.red {
-    color: red;
+.redTeam {
+    background-color: red;
+    height: 50%;
 }
 
-.blue {
-    color: blue;
+.blueTeam {
+    background-color: blue;
+    height: 50%;
+}
+
+.number {
+    font-size: 2em;
 }

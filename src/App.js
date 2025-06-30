@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
-import { io } from 'socket.io-client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import JoinForm  from './components/JoinForm';
 import Game from './components/Game';
