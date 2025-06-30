@@ -91,6 +91,11 @@ function Game() {
                 />
             </div>
             <div className='vertical-container'>
+                <div className= 'title' style={{ color: 'green' }}>
+                    CODEN
+                    <span style={{ color: 'blue' }}>AI</span>
+                    MS
+                </div>
                 <div className= 'board'>
                     <Board
                         cards={cards}
@@ -104,7 +109,6 @@ function Game() {
                     />
                 </div>
             </div>
-            
             <div className= 'team'>
                 <TeamPanel
                     redLeft={redLeft} 
