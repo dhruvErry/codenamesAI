@@ -4,9 +4,11 @@ import TeamPanel from './TeamPanel';
 import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
-import { io } from 'socket.io-client';
+import { useAtom, useAtomValue } from "jotai";
+import { socketAtom } from "../Atoms";
 
 function Game() {
+    const socket = useAtomValue(socketAtom)
     const [cards, setCards] = useState([]);
     const [spy, setSpy] = useState(false);
     const [redLeft, setRedLeft] = useState(9)

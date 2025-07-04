@@ -1,4 +1,5 @@
-// import socket from '../socket';
+import { socketAtom } from '../Atoms';
+import { useAtomValue } from 'jotai';
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import './JoinForm.css';
@@ -7,14 +8,17 @@ function JoinForm () {
     const [name, setName] = useState("");
     const [room, setRoom] = useState("");
     const navigate = useNavigate();
+    const socket = useAtomValue(socketAtom)
 
     function handleSubmit (e) {
         e.preventDefault()
         setRoom(e.target[0].value)
         setName(e.target[1].value)
-        // socket.emit("join room", (room, name))
+        socket.emit("join room", (room, name))
         navigate('/game')
-    }    return (
+    }    
+    
+    return (
         <div className = "container-form">
             <div className = 'entry-form'>
                 <form className="join-form" onSubmit = {handleSubmit}>

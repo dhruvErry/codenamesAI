@@ -1,4 +1,11 @@
-.app {
+body, html, * {
+  margin: 0;
+  font-family: 'LittleMicroSans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* .app {
   text-align: center;
 }
 
@@ -35,4 +42,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

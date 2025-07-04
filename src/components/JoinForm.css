@@ -1,47 +1,69 @@
-.entry-form {
-    background-color: #fff;
-    border-radius: 0.9375em; /* 15px */
-    box-shadow: 0 0 1.25em rgba(0, 0, 0, 0.2); /* 20px */
-    padding: 1.25em 1.25em; /* 20px */
-    transition: transform 0.2s;
-    width: 31.25em; /* 500px */
-    text-align: center;
+/* Center container */
+.container-form {
+  background-color: #4caf50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.container-form {
-    background-color: #4caf50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Inner white box */
+.entry-form {
+  background-color: #fff;
+  border-radius: 1em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  padding: 2em;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Labels (Room, Name) */
+.entry-form label {
+  display: block;
+  margin: 1em 0 0.25em;
+  font-size: 1em;
 }
 
 .form-input {
-    display: block;
-    width: 100%;
-    padding: 0.5em; /* 8px */
-    box-sizing: border-box;
-    border: 0.0625em solid #ddd; /* 1px */
-    border-radius: 0.375em; /* 6px */
-    font-size: 0.75em; /* 12px */
-    margin: 0.3125em; /* 5px */
+  width: 100%;
+  padding: 0.75em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  box-sizing: border-box;
+  letter-spacing: .05em;
+  font-weight: lighter;
 }
 
 .form-button {
-    padding: 0.9375em; /* 15px */
-    border-radius: 0.625em; /* 10px */
-    margin-top: 0.9375em; /* 15px */
-    border: none;
-    color: white;
-    cursor: pointer;
-    background-color: #4caf50;
-    width: 40%;
-    font-size: 1em; /* 16px */
+  width: 100%;
+  padding: 0.75em;
+  font-size: 1em;
+  border: none;
+  border-radius: 0.5em;
+  background-color: #388e3c;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 2em;
 }
 
-.form-textarea {
-    resize: none;
-    width: 98%;
-    min-height: 6.25em; /* 100px */
-    max-height: 9.375em; /* 150px */
+.form-button:hover {
+  background-color: #2e7d32;
 }
+
+/* .form-textarea {
+  resize: none;
+  width: 100%;
+  min-height: 6em;
+  max-height: 10em;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  font-size: 1em;
+  margin-top: 1em;
+  letter-spacing: 1em;
+} */

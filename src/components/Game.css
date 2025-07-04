@@ -48,16 +48,16 @@
 }
 
 .swal2-popup {
-    width: 40em;    
+    width: 42em;    
 }
 
 .swal2-confirm {
     background-color: red;
 }
 
-button.swal2-styled.swal2-confirm {
+/* button.swal2-styled.swal2-confirm {
     font-family: LittleMicroSans;
-}
+} */
 
 div:where(.swal2-container) button.swal2-styled.swal2-confirm:hover {
     background-color: gray;
