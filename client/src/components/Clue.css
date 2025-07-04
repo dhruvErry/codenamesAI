@@ -1,0 +1,68 @@
+.clue-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    /* margin-top: 1em; */
+}
+
+.clue-form {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+}
+
+.clue-input {
+    padding: 0.2em 1em;
+    margin-top: 5%;
+    font-size: 1.2em;
+    border: 3px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.clue-input[type="text"] {
+    width: 11em;
+    margin-right: 2%;
+}
+
+.clue-input[type="number"] {
+    width: 4em;
+}
+
+.clue-button {
+    padding: 0.4em 1em;
+    margin-top: 5%;
+    margin-left: 5%;
+    font-size: 1.2em;
+    width: auto;
+    white-space: nowrap;
+    background: #e33;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.clue-button:hover {
+    background: #c22;
+}
+
+.clue-display {
+    margin-top: 1em;
+    font-size: 1.8em;
+    color: darkslategray;
+    width:max-content;
+    border: 2px solid rgb(170, 170, 140);
+    border-radius: 6px;
+    padding: 0.5em 0.8em;
+}
+
+/* .clue-input,
+.clue-button {
+    font-family: 'LittleMicroSans', sans-serif;
+} */
