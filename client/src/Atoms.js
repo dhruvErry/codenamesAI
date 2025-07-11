@@ -1,7 +1,8 @@
 import { atom } from 'jotai'
 import { io } from 'socket.io-client';
 
-const socketAtom = atom(() => io("http://localhost:8080/", { }))
+const serverURL = process.env.REACT_APP_SERVER_URL;
+const socketAtom = atom(() => io(serverURL, { }))
 
 const playersAtom = atom([]);
 
