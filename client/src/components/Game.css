@@ -1,37 +1,41 @@
 .game-container {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;     
     background-color: beige;
+    overflow: hidden;
+    align-items: stretch;
 }
 
 
 .vertical-container {
-    width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
-    margin-top: 7em;
+    justify-content: flex-start;
+    margin: 0;
+    height: 100%;
+    padding-top: 2em;
 }
 
 .team {
-    width: 25%;
-    align-self: start;
-    height: 100vh;
+    width: 10vw;
+    min-width: 100px;
+    align-self: stretch;
+    /* height: 100vh; */
 }
 
 .title {
     font-size: 4em;
-    margin-top: -1em;
+    margin: 0 0 0.5em 0;
     letter-spacing: .2em;
+    text-align: center;
 }
 
 .board {
-    margin-top: 3em;
+    flex: 1 1 auto;
+    margin-top: 0;
 }
 
 .clue {
@@ -40,6 +44,7 @@
     align-items: center;
     /* margin-top: .2em; */
     width: 40%;
+    margin-bottom: 4.5em;
 }
 
 .swal2-container {

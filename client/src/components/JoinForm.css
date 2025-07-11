@@ -9,7 +9,7 @@
 
 /* Inner white box */
 .entry-form {
-  background-color: #fff;
+  background-color: beige;
   border-radius: 1em;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   padding: 2em;
@@ -36,6 +36,7 @@
   box-sizing: border-box;
   letter-spacing: .05em;
   font-weight: lighter;
+  background-color: beige;
 }
 
 .form-button {
@@ -55,6 +56,16 @@
   background-color: #2e7d32;
 }
 
+.loading {
+  color: beige;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 2em;
+  background-color: rgb(9, 69, 148);
+  border-radius: 0.5em;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
 /* .form-textarea {
   resize: none;
   width: 100%;
@@ -67,3 +78,14 @@
   margin-top: 1em;
   letter-spacing: 1em;
 } */
+
+.container-gif {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gif {
+  margin-bottom: 2em;
+}
+

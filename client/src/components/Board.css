@@ -6,9 +6,12 @@ overflow: hidden;
 
 .container-board {
   display: grid;
-  grid-template-columns: repeat(5, 13em);
-  grid-template-rows: repeat(5, 8em);
-  width: fit-content;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  width: 80vw;
+  max-width: 60em;
+  height: 60vh;
+  max-height: 40em;
   gap: 0.4em;
   /* border: .05em solid black; */
   border-radius: .5em;

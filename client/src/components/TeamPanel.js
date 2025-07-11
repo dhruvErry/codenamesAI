@@ -2,16 +2,25 @@ import './TeamPanel.css';
 import { socketAtom } from '../Atoms';
 import { useAtomValue } from 'jotai';
 import { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 
 function TeamPanel({redLeft, blueLeft}) {
+    const { state } = useLocation();
+    const { room, name } = state;
     const socket = useAtomValue(socketAtom)
     const [players, setPlayers] = useState([])
     
     useEffect(() => {
-        socket.on("update players", (newPlayers) => {
-            setPlayers(newPlayers)
-        })
+        socket.emit("join room", room, name)
+    }, [])
+
+    useEffect(() => {
+
+    socket.on("update players", (newPlayers) => {
+        console.log(JSON.parse(newPlayers))
+        setPlayers(JSON.parse(newPlayers))
     })
+    }, [socket])
 
     return (
         <div className="container-team">

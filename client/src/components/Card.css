@@ -7,7 +7,7 @@
     justify-content: center;
     border: 0.1em solid beige;
     border-radius: .5em;
-    font-size: 1.25em;
+    font-size: 1.1em;
     letter-spacing: 0.07em;
     transition: border 0.8s ease-in;
 }
@@ -32,4 +32,6 @@
     color: white;
     padding: 0.3em;
     transition: color 0.8s ease;
-}
+} 
+
+

@@ -1,7 +1,7 @@
 import { atom } from 'jotai'
 import { io } from 'socket.io-client';
 
-const socketAtom = atom(() => io("http://localhost:8080"))
+const socketAtom = atom(() => io("http://localhost:8080/", { }))
 
 const playersAtom = atom([]);
 
