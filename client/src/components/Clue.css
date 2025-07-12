@@ -53,8 +53,7 @@
 }
 
 .clue-display {
-    margin-top: 1em;
-    font-size: 1.8em;
+    font-size: 1.5em;
     color: darkslategray;
     width:max-content;
     border: 2px solid rgb(170, 170, 140);
@@ -66,3 +65,30 @@
 .clue-button {
     font-family: 'LittleMicroSans', sans-serif;
 } */
+
+/* @media screen and (min-width: 1281px) {
+
+    .clue-container {
+        margin-bottom: 2em;
+    }
+
+    .clue-input {
+        font-size: 1.5em;
+    }
+
+    .clue-button {
+        font-size: 1.5em;
+    }
+
+    .clue-display {
+        font-size: 2.2em;
+    }
+
+} */
+
+@media screen and (min-width: 1281px) {
+
+    .clue-container {
+        margin-bottom: 1em;
+    }
+}

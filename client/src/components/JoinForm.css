@@ -89,3 +89,9 @@
   margin-bottom: 2em;
 }
 
+@media screen and (min-width: 1281px) {
+  .entry-form {
+    transform: scale(1.3);
+    transform-origin: center;  /* scale out from the centre */
+  }
+}

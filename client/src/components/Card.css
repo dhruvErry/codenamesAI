@@ -7,7 +7,7 @@
     justify-content: center;
     border: 0.1em solid beige;
     border-radius: .5em;
-    font-size: 1.1em;
+    font-size: 1.5em;
     letter-spacing: 0.07em;
     transition: border 0.8s ease-in;
 }
@@ -27,11 +27,26 @@
 .card.grey, .card-clicked.grey, .card-revealed.grey { background-color: grey; transition: background-color 4s; }
 .card.black, .card-clicked.black, .card-revealed.black { background-color: black; transition: background-color 4s; }
 
-.word {
-    font-size: 1.38em;
-    color: white;
-    padding: 0.3em;
-    transition: color 0.8s ease;
-} 
 
 
+/* @media screen and (min-width: 1281px) {
+
+    .word {
+        font-size: 1.38em;
+        color: white;
+        padding: 0.3em;
+        transition: color 0.8s ease;
+    } 
+    .card {
+        font-size: 1.5em;
+    }
+    
+    .card-revealed {
+        font-size: 1.5em;
+    }
+
+    .card-clicked {
+        font-size: 1.5em;
+    }
+
+} */
