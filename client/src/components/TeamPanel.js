@@ -10,9 +10,9 @@ function TeamPanel({redLeft, blueLeft}) {
     const socket = useAtomValue(socketAtom)
     const [players, setPlayers] = useState([])
     
-    useEffect(() => {
-        socket.emit("join room", room, name)
-    }, [])
+    // useEffect(() => {
+    //     socket.emit("join room", room, name)
+    // }, [])
 
     useEffect(() => {
 

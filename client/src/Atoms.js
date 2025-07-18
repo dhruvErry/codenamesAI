@@ -6,6 +6,10 @@ const socketAtom = atom(() => io(serverURL, { }))
 
 const playersAtom = atom([]);
 
+const cluesAtom = atom([]);
+
+const activeClueIndexAtom = atom(null);
+
 // const scoresAtom = atom({red: -1, blue: -1});
 
-export { socketAtom, playersAtom };
+export { socketAtom, playersAtom, cluesAtom, activeClueIndexAtom };

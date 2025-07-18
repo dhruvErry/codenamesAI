@@ -1,19 +1,19 @@
-import { socketAtom } from '../Atoms';
-import {useState} from 'react';
+import { socketAtom, cluesAtom } from '../Atoms';
+import { useAtom, useAtomValue } from "jotai";
+import { useState, useEffect } from 'react';
 import './Clue.css';
 
-function Clue () {
-    const [clue, setClue] = useState("");
-    const [number, setNumber] = useState("");
+function Clue({ clues, activeClueIndex }) {
+    const socket = useAtomValue(socketAtom)
 
     function handleSubmit (e) {
         e.preventDefault()
-        setClue(e.target[0].value)
-        setNumber(e.target[1].value)
-        // socket.emit("join room", (room, name))
-    }      
-    
-    if (clue === "") {
+        const clue = e.target[0].value
+        const number = e.target[1].value
+        socket.emit("clue", clue, number)
+    }
+
+    if (activeClueIndex === null || !clues[activeClueIndex]) {
         return (
             <div className = 'clue-container'>
                 <form className="clue-form" onSubmit = {handleSubmit}>
@@ -29,7 +29,7 @@ function Clue () {
 
     return (
         <div className = 'clue-display'>
-            {clue.toUpperCase()} {'\u00A0'} {number}
+            {clues[activeClueIndex].clue.toUpperCase()} {'\u00A0'} {clues[activeClueIndex].number}
         </div>
     )
 }

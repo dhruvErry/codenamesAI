@@ -59,6 +59,7 @@
     border: 2px solid rgb(170, 170, 140);
     border-radius: 6px;
     padding: 0.5em 0.8em;
+    margin-bottom: 0.2em;
 }
 
 /* .clue-input,
@@ -91,4 +92,9 @@
     .clue-container {
         margin-bottom: 1em;
     }
+
+    .clue-display {
+        margin-bottom: .5em;
+    }
+
 }

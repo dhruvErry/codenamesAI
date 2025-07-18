@@ -8,19 +8,6 @@ const io = require('socket.io')(server, {
   }
 });
 
-
-// const io = require("socket.io")(server, {
-//     handlePreflightRequest: (req, res) => {
-//         const headers = {
-//             "Access-Control-Allow-Headers": "Content-Type, Authorization",
-//             "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
-//             "Access-Control-Allow-Credentials": true
-//         };
-//         res.writeHead(200, headers);
-//         res.end();
-//     }
-// });
-
 const port = process.env.PORT || 8080;
 
 const path = require('path');
@@ -31,8 +18,23 @@ app.get('/', function (req, res) {
     res.sendFile('index.html', { root: 'static' });
 });
 
-let players = [];
-let rooms = [];
+// let rooms = [
+//     {   players: [],
+//         roomName: "",
+//         cards: [], 
+//         clues: []   }
+//     ];
+
+const rooms = new Map();
+
+function findRoom(socketID){
+    for (const [roomName, roomState] of rooms.entries()){
+        if (roomState.players.some(player => player.id === socketID)){
+            return roomName;
+        }
+    }
+    return null;
+}
 
 io.on('connection', (socket) => {
     console.log(socket.id, 'user connected');
@@ -46,29 +48,106 @@ io.on('connection', (socket) => {
         const player = {
             id: socket.id,
             name: name,
-            room: room,
             team: null,
             role: null
         };
-        
-        players.push(player);
-        
-        if (!rooms.includes(room)) {
-            rooms.push(room);
+
+        if (!rooms.has(room)) {
+            // rooms.push({roomName: room, cards: []});
+            rooms.set(room, {players: [], cards: [], clues: [], activeClueIndex: -1})
         }
         
-        socket.join(room);
-        io.to(room).emit('update players', JSON.stringify(players));
+        rooms.get(room).players.push(player);
+        socket.join(room)
+
+        if (rooms.get(room).cards.length === 0) {
+            createGame(room)
+        }
+
+        socket.emit('create game', rooms.get(room));
+        // io.to(room).emit('update players', JSON.stringify(players));
     });
 
-    socket.on('join team', (team, role) => {
-        const player = players.find(p => p.id === socket.id);
-        player.team = team;
-        player.role = role;
-        io.to(player.room).emit('update players', players);
-    });
+    socket.on('card clicked', (index) => {
+        // const room = rooms.find(r => r.players.find(p => p.id === socket.id))
+        const room = findRoom(socket.id);
+        rooms.get(room).cards[index].revealed = true;
+        if (room) {
+            io.to(room).emit('card clicked', index);
+        }
+    })
 
-})  ;
+    socket.on('right clicked', (index) => {
+        // const player = players.find(p => p.id === socket.id);
+        // const room = rooms.find(r => r.roomName === r.players.find(p => p.id === socket.id).roomName)
+        const room = findRoom(socket.id);
+        rooms.get(room).cards[index].clicked = true;
+        if (room) {
+            io.to(room).emit('right clicked', index);
+        }
+    })
+
+    socket.on('clue', (clue, number) => {
+        // const room = rooms.find(r => r.players.find(p => p.id === socket.id))
+        const room = findRoom(socket.id);
+        rooms.get(room).clues.push({clue: clue, number: number});
+        rooms.get(room).activeClueIndex = rooms.get(room).clues.length - 1;
+        if (room) {
+            io.to(room).emit('clue', clue, number, rooms.get(room).activeClueIndex);
+        }
+    })
+
+    // socket.on('join team', (team, role) => {
+    //     // const room = rooms.find(r => r.players.find(p => p.id === socket.id))
+    //     const room = findRoom(socket.id);
+    //     const player = room.players.find(p => p.id === socket.id);
+    //     if (player) {
+    //         player.team = team;
+    //         player.role = role;
+    //         io.to(player.room).emit('update players', players);
+    //     }
+    // });
+
+});
+
+function createGame(room) {
+    const words = [
+        "ANJEL", "TREE", "BOMB", "CAR", "BOOK", "DOG", "HOUSE", "SUN", "MOON", "FIRE",
+        "WATER", "MOUSE", "KEY", "DOOR", "PLANE", "CLOUD", "APPLE", "GOLD", "SALT", "IRON",
+        "PAPER", "PHONE", "RING", "SHIP", "FISH"
+    ];
+
+    const teamCounts = {
+        red: 9,
+        blue: 8,
+        yellow: 5,
+        grey: 2,
+        black: 1
+    };
+
+    let teams = [];
+
+    for (let color in teamCounts) {
+        for (let i = 0; i < teamCounts[color]; i++) {
+            teams.push(color);
+        }
+    }
+
+    const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    const shuffledTeams = [...teams].sort(() => Math.random() - 0.5);
+
+    const generated = [];
+
+    for (let i = 0; i < 25; i++) {
+        generated.push({
+            word: shuffledWords[i],
+            team: shuffledTeams[i],
+            clicked: false,
+            revealed: false,
+        });
+    }
+    rooms.get(room).cards = generated;
+}
 
 server.listen(port, function () {
     console.log(`Listening on port ${port}`);
