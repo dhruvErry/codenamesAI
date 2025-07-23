@@ -40,12 +40,18 @@
     margin-left: 5%;
     font-size: 1.2em;
     width: auto;
-    white-space: nowrap;
-    background: #e33;
+    white-space: nowrap;    
     color: #fff;
     border: none;
     border-radius: 6px;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.end-turn-button {
+    margin-bottom: .8em;
+    margin-left: 2em;
+    font-size: .9em;
+    letter-spacing: .05em;
 }
 
 .clue-button:hover {
@@ -60,6 +66,21 @@
     border-radius: 6px;
     padding: 0.5em 0.8em;
     margin-bottom: 0.2em;
+}
+
+.clue-display-container {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+}
+
+.clue-bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5em;
+    justify-content: flex-start;
 }
 
 /* .clue-input,
@@ -94,6 +115,10 @@
     }
 
     .clue-display {
+        margin-bottom: .5em;
+    }
+
+    .clue-bottom {
         margin-bottom: .5em;
     }
 

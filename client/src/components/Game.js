@@ -5,7 +5,8 @@ import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
-import { socketAtom, cluesAtom, activeClueIndexAtom } from "../Atoms";
+import { socketAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom } from "../Atoms";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Game() {
     const socket = useAtomValue(socketAtom)
@@ -13,10 +14,16 @@ function Game() {
     const [activeClueIndex, setActiveClueIndex] = useAtom(activeClueIndexAtom);
     const [cards, setCards] = useState([]);
     const [spy, setSpy] = useState(false);
-    const [redLeft, setRedLeft] = useState(9)
-    const [blueLeft, setBlueLeft] = useState(8)
-    const [redTurn, setRedTurn] = useState(true)
-
+    // const [redLeft, setRedLeft] = useState(9)
+    // const [blueLeft, setBlueLeft] = useState(8)
+    const [redLeft, setRedLeft] = useAtom(redLeftAtom);
+    const [blueLeft, setBlueLeft] = useAtom(blueLeftAtom);
+    // const [redTurn, setRedTurn] = useState(true)
+    const location = useLocation();
+    const room = location.state?.room;
+    const name = location.state?.name;
+    const [redTurn, setRedTurn] = useAtom(redTurnAtom);
+    console.log("Rendering Game, redTurn:", redTurn);
     // useEffect(() => {
     //     const words = [
     //         "ANJEL", "TREE", "BOMB", "CAR", "BOOK", "DOG", "HOUSE", "SUN", "MOON", "FIRE",
@@ -62,9 +69,18 @@ function Game() {
             setCards(room.cards);
             setClues(room.clues);
             setActiveClueIndex(room.activeClueIndex);
+            setRedTurn(room.redTurn);
+            console.log("Received create game, redTurn:", room.redTurn);
         })
         return () => { socket.off("create game") }
-        }, [socket, cards])
+    }, [socket])
+
+    useEffect(() => {
+        if (room && name) {
+            console.log("Emitting join room", room, name);
+            socket.emit("join room", room, name);
+        }
+    }, [])
 
     useEffect(() => {
         socket.on("clue", (clue, number, index) => {
@@ -84,21 +100,34 @@ function Game() {
         }, [socket, cards])
 
     useEffect(() => {
+        socket.on("change turn", (team) => {
+            console.log("Received change turn, setting redTurn to:", team);
+            setRedTurn(team === 'red');
+            setActiveClueIndex(null);
+        })
+        return () => { socket.off("change turn") }
+    }, [socket])
+
+    useEffect(() => {
         socket.on("card clicked", (index) => {
             const updated = [...cards];
             updated[index].revealed = true;
             updated[index].clicked = false;
             setCards(updated);
             if (cards[index].team === 'red'){
-                setRedLeft(prev => prev - 1)
+                setRedLeft(prev => prev - 1);
                 if (!redTurn){
-                    setRedTurn(true)
+                    console.log("Emitting change turn (red)");
+                    socket.emit("change turn", 'red');
+                    // setRedTurn(true)
                 }
             }
             else if (cards[index].team === 'blue'){
-                setBlueLeft(prev => prev - 1)
+                setBlueLeft(prev => prev - 1);
                 if (redTurn){
-                    setRedTurn(false)
+                    console.log("Emitting change turn (blue)");
+                    socket.emit("change turn", 'blue');
+                    // setRedTurn(false)
                 }
             }
             else if (cards[index].team === 'grey'){
@@ -107,7 +136,9 @@ function Game() {
                 type: 'success',
                 confirmButtonText: "That's a shame."
                 })
-                setRedTurn(prev => !prev)
+                console.log("Emitting change turn (grey)");
+                socket.emit("change turn", redTurn ? 'blue' : 'red');
+                // setRedTurn(prev => !prev)
             }
             else if (cards[index].team === 'black'){
                 Swal.fire({
@@ -117,7 +148,9 @@ function Game() {
                 })
             }
             else {
-                setRedTurn(prev => !prev)
+                console.log("Emitting change turn (other)");
+                socket.emit("change turn", redTurn ? 'blue' : 'red');
+                // setRedTurn(prev => !prev)
             } 
         })
         return () => { socket.off("card clicked") }
@@ -145,7 +178,7 @@ function Game() {
             <div className='vertical-container'>
                 <div className= 'title' style={{ color: 'green' }}>
                     CODEN
-                    <span style={{ color: 'blue' }}>AI</span>
+                    <span style={{ color: redTurn ? 'red' : 'blue' }}>AI</span>
                     MS
                 </div>
                 <div className= 'board'>

@@ -18,13 +18,6 @@ app.get('/', function (req, res) {
     res.sendFile('index.html', { root: 'static' });
 });
 
-// let rooms = [
-//     {   players: [],
-//         roomName: "",
-//         cards: [], 
-//         clues: []   }
-//     ];
-
 const rooms = new Map();
 
 function findRoom(socketID){
@@ -40,11 +33,11 @@ io.on('connection', (socket) => {
     console.log(socket.id, 'user connected');
 
     socket.on('disconnect', function () {
-        console.log('user disconnected');
+        console.log(socket.id, 'user disconnected'); 
     });
     
     socket.on('join room', (room, name) => {
-
+        // Remove duplicate players
         const player = {
             id: socket.id,
             name: name,
@@ -53,11 +46,12 @@ io.on('connection', (socket) => {
         };
 
         if (!rooms.has(room)) {
-            // rooms.push({roomName: room, cards: []});
-            rooms.set(room, {players: [], cards: [], clues: [], activeClueIndex: -1})
+            rooms.set(room, {players: [], cards: [], redTurn: true, clues: [], activeClueIndex: -1})
         }
-        
-        rooms.get(room).players.push(player);
+        // Only add player if not already present
+        if (!rooms.get(room).players.some(p => p.id === socket.id)) {
+            rooms.get(room).players.push(player);
+        }
         socket.join(room)
 
         if (rooms.get(room).cards.length === 0) {
@@ -65,8 +59,16 @@ io.on('connection', (socket) => {
         }
 
         socket.emit('create game', rooms.get(room));
+        console.log(rooms.get(room).players);
         // io.to(room).emit('update players', JSON.stringify(players));
     });
+
+    socket.on('change turn', (team) => {
+        const room = findRoom(socket.id);
+        if (!room) return;
+        rooms.get(room).redTurn = (team === 'red');
+        io.to(room).emit('change turn', team);
+    })
 
     socket.on('card clicked', (index) => {
         // const room = rooms.find(r => r.players.find(p => p.id === socket.id))

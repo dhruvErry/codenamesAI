@@ -20,15 +20,12 @@ function JoinForm () {
 
     function handleSubmit (e) {
         e.preventDefault()
-        // setRoom(e.target[0].value)
-        // setName(e.target[1].value)
         const room = e.target[0].value
         const name = e.target[1].value
         navigate('/game', {
-            // state: {room, name}
+            state: {room, name}
         });
-
-        socket.emit("join room", room, name)
+        // Do NOT emit here
     }    
 
     if (!connection) {
