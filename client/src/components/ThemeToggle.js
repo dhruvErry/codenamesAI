@@ -15,7 +15,6 @@ function ThemeToggle() {
             onClick={toggleTheme}
             title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
-            {theme === 'light' ? '🌙' : '☀️'}
         </button>
     );
 }

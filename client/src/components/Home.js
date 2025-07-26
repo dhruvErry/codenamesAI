@@ -13,11 +13,11 @@ function Home() {
             <div className="join-prompt">
                 <div className="title" style={{ color: '#009900', marginBottom: '2rem' }}>
                     CODEN
-                    <span style={{ color: '#666666' }}>AI</span>
+                    <span style={{ color: '#D00000' }}>AI</span>
                     MS
                 </div>
-                <h2 style={{ color: '#4A4A4A', marginBottom: '1rem' }}>Ready to play Codenames?</h2>
-                <p style={{ color: '#4A4A4A', marginBottom: '2rem' }}>Join a room to start the game</p>
+                <h2 style={{ color: theme === 'dark' ? 'lightgray' : '#2c3e50', marginBottom: '1rem' }}>Ready to play Codenames?</h2>
+                <p style={{ color: theme === 'dark' ? 'lightgray' : '#34495e', marginBottom: '2rem' }}>Join a room to start the game</p>
                 <Link to="/join" className="join-link-button">
                     Join a Room
                 </Link>

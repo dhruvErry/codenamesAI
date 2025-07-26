@@ -26,14 +26,15 @@
 }
 
 .clue-input.light {
-    background: beige;
+    background: transparent;
     color: #333;
+    border-color: rgba(0, 0, 0, 0.3);
 }
 
 .clue-input.dark {
-    background: #4a5c6e;
+    background: transparent;
     color: #f0f0f0;
-    border-color: #666;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .clue-input[type="text"] {
@@ -81,14 +82,15 @@
 }
 
 .clue-display.light {
-    background: beige;
+    background: transparent;
     color: #333;
+    border-color: rgba(0, 0, 0, 0.3);
 }
 
 .clue-display.dark {
-    background: #4a5c6e;
+    background: transparent;
     color: #f0f0f0;
-    border-color: #666;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .clue-display-container {

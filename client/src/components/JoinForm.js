@@ -57,9 +57,7 @@ function JoinForm () {
                         MS
                     </div>
                     <form className="join-form" onSubmit = {handleSubmit}>
-                        <label htmlFor="room">Room</label>
                         <input className="form-input" placeholder = "Enter Room" id = "room" required/>
-                        <label htmlFor="name">Name</label>
                         <input className="form-input" placeholder = "Enter Your Name" id = "name" required/>
                         <button className="form-button" type="submit">Create or Join Game</button>
                     </form>
