@@ -15,6 +15,19 @@ overflow: hidden;
   gap: 0.4em;
   /* border: .05em solid black; */
   border-radius: .5em;
+  padding: 1em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.container-board.light {
+  background-color: beige;
+  box-shadow: none;
+}
+
+.container-board.dark {
+  background: transparent;
+  box-shadow: none;
 }
 
 /* @media screen and (min-width: 1281px) {

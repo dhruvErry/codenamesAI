@@ -1,7 +1,8 @@
-import { socketAtom } from '../Atoms';
+import { socketAtom, themeAtom } from '../Atoms';
 import { useAtomValue } from 'jotai';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from './ThemeToggle';
 import './JoinForm.css';
 
 function JoinForm () {
@@ -10,6 +11,7 @@ function JoinForm () {
     const [connection, setConnection] = useState(false)
     const navigate = useNavigate();
     const socket = useAtomValue(socketAtom)
+    const theme = useAtomValue(themeAtom)
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -30,7 +32,8 @@ function JoinForm () {
 
     if (!connection) {
         return (
-            <div className="container-form">
+            <div className={`container-form ${theme}`}>
+                <ThemeToggle />
                 <div className='container-gif'>
                     <div className='gif'>
                         <img src="loading.gif"/>
@@ -45,8 +48,14 @@ function JoinForm () {
 
     else {
         return (
-            <div className = "container-form">
+            <div className = {`container-form ${theme}`}>
+                <ThemeToggle />
                 <div className = 'entry-form'>
+                    <div className="title" style={{ color: '#009900', marginBottom: '2rem' }}>
+                        CODEN
+                        <span style={{ color: '#D00000' }}>AI</span>
+                        MS
+                    </div>
                     <form className="join-form" onSubmit = {handleSubmit}>
                         <label htmlFor="room">Room</label>
                         <input className="form-input" placeholder = "Enter Room" id = "room" required/>

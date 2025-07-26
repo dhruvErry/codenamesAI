@@ -21,8 +21,19 @@
     font-size: 1.2em;
     border: 3px solid #ccc;
     border-radius: 6px;
-    background: #fff;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.clue-input.light {
+    background: beige;
+    color: #333;
+}
+
+.clue-input.dark {
+    background: #4a5c6e;
+    color: #f0f0f0;
+    border-color: #666;
 }
 
 .clue-input[type="text"] {
@@ -40,8 +51,9 @@
     margin-left: 5%;
     font-size: 1.2em;
     width: auto;
-    white-space: nowrap;    
-    color: #fff;
+    white-space: nowrap;
+    background: #D00000;
+    color: #FFFFFF;
     border: none;
     border-radius: 6px;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
@@ -50,22 +62,33 @@
 .end-turn-button {
     margin-bottom: .8em;
     margin-left: 2em;
-    font-size: .9em;
+    font-size: 1em;
     letter-spacing: .05em;
 }
 
 .clue-button:hover {
-    background: #c22;
+    background: #B00000;
 }
 
 .clue-display {
     font-size: 1.5em;
-    color: darkslategray;
     width:max-content;
     border: 2px solid rgb(170, 170, 140);
     border-radius: 6px;
     padding: 0.5em 0.8em;
     margin-bottom: 0.2em;
+    transition: all 0.3s ease;
+}
+
+.clue-display.light {
+    background: beige;
+    color: #333;
+}
+
+.clue-display.dark {
+    background: #4a5c6e;
+    color: #f0f0f0;
+    border-color: #666;
 }
 
 .clue-display-container {

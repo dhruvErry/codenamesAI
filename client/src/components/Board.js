@@ -1,11 +1,15 @@
 import Card from './Card';
+import { useAtomValue } from 'jotai';
+import { themeAtom } from '../Atoms';
 import './Board.css';
 
 function Board({ cards, spy, onCardRightClick, onCardClick}) {
+    const theme = useAtomValue(themeAtom);
+    
     if (cards.length < 25) {
         return <div>Loading...</div>;
     }    return (
-        <div className="container-board">
+        <div className={`container-board ${theme}`}>
             {cards.map((card, i) => (
                 <Card
                     key={i}

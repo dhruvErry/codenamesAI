@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
         }
         // Only add player if not already present
         if (!rooms.get(room).players.some(p => p.id === socket.id)) {
-            rooms.get(room).players.push(player);
+        rooms.get(room).players.push(player);
         }
         socket.join(room)
 
@@ -63,30 +63,56 @@ io.on('connection', (socket) => {
         // io.to(room).emit('update players', JSON.stringify(players));
     });
 
-    socket.on('change turn', (team) => {
+    socket.on('card clicked', (index) => {
         const room = findRoom(socket.id);
         if (!room) return;
-        rooms.get(room).redTurn = (team === 'red');
-        io.to(room).emit('change turn', team);
-    })
-
-    socket.on('card clicked', (index) => {
-        // const room = rooms.find(r => r.players.find(p => p.id === socket.id))
-        const room = findRoom(socket.id);
-        rooms.get(room).cards[index].revealed = true;
-        if (room) {
-            io.to(room).emit('card clicked', index);
+        const game = rooms.get(room);
+        const card = game.cards[index];
+        let justRevealedIndex = null;
+        if (!card.revealed) {
+            justRevealedIndex = index;
         }
-    })
+        card.revealed = true;
+        card.clicked = false;
+        if (card.team === 'red') {
+            game.redLeft -= 1;
+            if (!game.redTurn) {
+                game.redTurn = true;
+                game.activeClueIndex = null;
+            }
+        } else if (card.team === 'blue') {
+            game.blueLeft -= 1;
+            if (game.redTurn) {
+                game.redTurn = false;
+                game.activeClueIndex = null;
+            }
+        } else if (card.team === 'grey') {
+            game.redTurn = !game.redTurn;
+            game.activeClueIndex = null;
+        } else if (card.team === 'black') {
+            // Optionally handle game over logic
+        } else {
+            game.redTurn = !game.redTurn;
+            game.activeClueIndex = null;
+        }
+        io.to(room).emit('update game', {
+            cards: game.cards,
+            redTurn: game.redTurn,
+            redLeft: game.redLeft,
+            blueLeft: game.blueLeft,
+            clues: game.clues,
+            activeClueIndex: game.activeClueIndex,
+            justRevealedIndex
+        });
+    });
 
     socket.on('right clicked', (index) => {
         // const player = players.find(p => p.id === socket.id);
         // const room = rooms.find(r => r.roomName === r.players.find(p => p.id === socket.id).roomName)
         const room = findRoom(socket.id);
-        rooms.get(room).cards[index].clicked = true;
-        if (room) {
+        if (!room) return;
+        rooms.get(room).cards[index].clicked = !rooms.get(room).cards[index].clicked;
             io.to(room).emit('right clicked', index);
-        }
     })
 
     socket.on('clue', (clue, number) => {
@@ -98,6 +124,15 @@ io.on('connection', (socket) => {
             io.to(room).emit('clue', clue, number, rooms.get(room).activeClueIndex);
         }
     })
+
+    socket.on('change turn', (team) => {
+        const room = findRoom(socket.id);
+        if (!room) return;
+        const game = rooms.get(room);
+        game.redTurn = (team === 'red');
+        game.activeClueIndex = null;
+        io.to(room).emit('change turn', team);
+    });
 
     // socket.on('join team', (team, role) => {
     //     // const room = rooms.find(r => r.players.find(p => p.id === socket.id))

@@ -1,24 +1,41 @@
 .card, .card-revealed, .card-clicked {
     width: 100%;
     height: 100%;
-    background-color: beige;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 0.1em solid beige;
     border-radius: .5em;
     font-size: 1.5em;
     letter-spacing: 0.07em;
-    transition: border 0.8s ease-in;
+    transition: all 0.3s ease;
 }
 
-.card:hover, .card-clicked:hover {
+.card.light, .card-revealed.light, .card-clicked.light {
+    background-color: beige;
+    border: 0.1em solid beige;
+}
+
+.card.dark, .card-revealed.dark, .card-clicked.dark {
+    background-color: transparent;
+    border: none;
+}
+
+.card.light:hover, .card-clicked.light:hover {
     background-color: lightgrey !important;
     transition: background-color 0.2s ease, border 0.8s ease-in;
 }
 
-.card-clicked {
+.card.dark:hover, .card-clicked.dark:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: background-color 0.2s ease, border 0.8s ease-in;
+}
+
+.card-clicked.light {
     border: 0.1em solid rgb(172, 172, 172);
+}
+
+.card-clicked.dark {
+    border: 0.1em solid rgba(255, 255, 255, 0.3);
 }
 
 .card.red, .card-clicked.red, .card-revealed.red { background-color: red; transition: background-color 4s; }

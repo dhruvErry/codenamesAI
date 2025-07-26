@@ -1,4 +1,4 @@
-import { socketAtom, cluesAtom, redTurnAtom, activeClueIndexAtom } from '../Atoms';
+import { socketAtom, cluesAtom, redTurnAtom, activeClueIndexAtom, themeAtom } from '../Atoms';
 import { useAtom, useAtomValue } from "jotai";
 import { useState, useEffect } from 'react';
 import './Clue.css';
@@ -8,6 +8,8 @@ function Clue() {
     const redTurn = useAtomValue(redTurnAtom)
     const activeClueIndex = useAtomValue(activeClueIndexAtom)
     const [clues, setClues] = useAtom(cluesAtom)
+    const theme = useAtomValue(themeAtom)
+
     function giveClue (e) {
         e.preventDefault()
         const clue = e.target[0].value
@@ -17,18 +19,17 @@ function Clue() {
 
     function endTurn (e) {
         e.preventDefault()
-        console.log("Emitting change turn (end turn)");
         socket.emit("change turn", redTurn ? 'blue' : 'red');
     }
 
     if (activeClueIndex === null || !clues[activeClueIndex]) {
         return (
-            <div className = 'clue-container'>
+            <div className = {`clue-container ${theme}`}>
                     <form className="clue-form" onSubmit = {giveClue}>
                         <label htmlFor="clue"></label>
-                        <input className="clue-input" type="text" placeholder = "Enter Clue" id = "clue" required/>
+                        <input className={`clue-input ${theme}`} type="text" placeholder = "Enter Clue" id = "clue" required/>
                         <label htmlFor="number"></label>
-                        <input className="clue-input" type = "number" placeholder = "0" id = "number" min = "0" required/>
+                        <input className={`clue-input ${theme}`} type = "number" placeholder = "0" id = "number" min = "0" required/>
                         <button
                             type="submit"
                             className='clue-button'
@@ -41,7 +42,7 @@ function Clue() {
 
     return (
         <div className = 'clue-display-container'>
-            <div className = 'clue-display'>
+            <div className = {`clue-display ${theme}`}>
                 {clues[activeClueIndex].clue.toUpperCase()} {'\u00A0'} {clues[activeClueIndex].number}
             </div>
             <div className = 'clue-bottom'>
@@ -49,7 +50,7 @@ function Clue() {
                     <button
                         className = 'clue-button end-turn-button'
                         style={{ background: redTurn ? 'red' : 'blue' }}
-                    >END TURN</button>
+                    >End Turn</button>
                 </form>
             </div>
         </div>

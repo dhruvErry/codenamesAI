@@ -5,8 +5,10 @@ import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
-import { socketAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom } from "../Atoms";
-import { useNavigate, useLocation } from "react-router-dom";
+import { socketAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom } from "../Atoms";
+import { useLocation, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ThemeToggle from './ThemeToggle';
 
 function Game() {
     const socket = useAtomValue(socketAtom)
@@ -14,16 +16,14 @@ function Game() {
     const [activeClueIndex, setActiveClueIndex] = useAtom(activeClueIndexAtom);
     const [cards, setCards] = useState([]);
     const [spy, setSpy] = useState(false);
-    // const [redLeft, setRedLeft] = useState(9)
-    // const [blueLeft, setBlueLeft] = useState(8)
     const [redLeft, setRedLeft] = useAtom(redLeftAtom);
     const [blueLeft, setBlueLeft] = useAtom(blueLeftAtom);
-    // const [redTurn, setRedTurn] = useState(true)
     const location = useLocation();
     const room = location.state?.room;
     const name = location.state?.name;
     const [redTurn, setRedTurn] = useAtom(redTurnAtom);
-    console.log("Rendering Game, redTurn:", redTurn);
+    const theme = useAtomValue(themeAtom);
+
     // useEffect(() => {
     //     const words = [
     //         "ANJEL", "TREE", "BOMB", "CAR", "BOOK", "DOG", "HOUSE", "SUN", "MOON", "FIRE",
@@ -109,52 +109,40 @@ function Game() {
     }, [socket])
 
     useEffect(() => {
+        socket.on("update game", (gameState) => {
+            const revealedIndex = gameState.justRevealedIndex;
+            if (revealedIndex !== null && revealedIndex !== undefined) {
+                const card = gameState.cards[revealedIndex];
+                if (card.team === 'grey') {
+                    Swal.fire({
+                        text: "A neutral card has been converted into a card of your color!",
+                        icon: 'info',
+                        confirmButtonText: "That's a shame."
+                    });
+                } else if (card.team === 'black') {
+                    Swal.fire({
+                        text: "Game over, you've lost!",
+                        icon: 'error',
+                        confirmButtonText: "Oh, no."
+                    });
+                }
+            }
+            setCards(gameState.cards);
+            setRedTurn(gameState.redTurn);
+            setRedLeft(gameState.redLeft);
+            setBlueLeft(gameState.blueLeft);
+            setClues(gameState.clues);
+            setActiveClueIndex(gameState.activeClueIndex);
+        })
+        return () => { socket.off("update game") }
+    }, [socket])
+
+    useEffect(() => {
         socket.on("card clicked", (index) => {
-            const updated = [...cards];
-            updated[index].revealed = true;
-            updated[index].clicked = false;
-            setCards(updated);
-            if (cards[index].team === 'red'){
-                setRedLeft(prev => prev - 1);
-                if (!redTurn){
-                    console.log("Emitting change turn (red)");
-                    socket.emit("change turn", 'red');
-                    // setRedTurn(true)
-                }
-            }
-            else if (cards[index].team === 'blue'){
-                setBlueLeft(prev => prev - 1);
-                if (redTurn){
-                    console.log("Emitting change turn (blue)");
-                    socket.emit("change turn", 'blue');
-                    // setRedTurn(false)
-                }
-            }
-            else if (cards[index].team === 'grey'){
-                Swal.fire({
-                text: "A neutral card has been converted into a card of your color!",
-                type: 'success',
-                confirmButtonText: "That's a shame."
-                })
-                console.log("Emitting change turn (grey)");
-                socket.emit("change turn", redTurn ? 'blue' : 'red');
-                // setRedTurn(prev => !prev)
-            }
-            else if (cards[index].team === 'black'){
-                Swal.fire({
-                text: "Game over, you've lost!",
-                type: 'success',
-                confirmButtonText: "Oh, no."
-                })
-            }
-            else {
-                console.log("Emitting change turn (other)");
-                socket.emit("change turn", redTurn ? 'blue' : 'red');
-                // setRedTurn(prev => !prev)
-            } 
+            // No local logic, server will send update
         })
         return () => { socket.off("card clicked") }
-        }, [socket, cards])
+    }, [socket])
 
     function handleCardClick(index) {
         socket.emit("card clicked", index)
@@ -165,8 +153,14 @@ function Game() {
         socket.emit("right clicked", index)
     }  
     
+    // Redirect to home if no room data
+    if (!room || !name) {
+        return <Navigate to="/" replace />;
+    }
+    
     return (
-        <div className="game-container">
+        <div className={`game-container ${theme}`}>
+            <ThemeToggle />
             {/* <div className= 'team'>
                 <TeamPanel
                     redLeft={redLeft} 
@@ -176,7 +170,7 @@ function Game() {
                 />
             </div>/ */}
             <div className='vertical-container'>
-                <div className= 'title' style={{ color: 'green' }}>
+                <div className= 'title' style={{ color: '#009900' }}>
                     CODEN
                     <span style={{ color: redTurn ? 'red' : 'blue' }}>AI</span>
                     MS

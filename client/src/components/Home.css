@@ -1,0 +1,123 @@
+.join-prompt-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.join-prompt-container.light {
+    background: #fdf6e3;
+}
+
+.join-prompt-container.dark {
+    background: linear-gradient(135deg, #D00000 0%, #0066CC 50%, #009900 100%);
+}
+
+.join-prompt {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.join-prompt.light {
+    background: linear-gradient(145deg, #eee8d5 0%, #fdf6e3 50%, #f4f1e8 100%);
+}
+
+.join-prompt.dark {
+    background: linear-gradient(145deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+}
+
+.join-prompt .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.join-prompt h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.join-prompt p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    color: #34495e;
+}
+
+.join-link-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #D00000 0%, #B00000 100%);
+    color: #FFFFFF;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(208, 0, 0, 0.3);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.join-link-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.join-link-button:hover::before {
+    left: 100%;
+}
+
+.join-link-button:hover {
+    background: linear-gradient(135deg, #B00000 0%, #900000 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(208, 0, 0, 0.4);
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .join-prompt-container {
+        padding: 1rem;
+    }
+    
+    .join-prompt {
+        padding: 2rem;
+    }
+    
+    .join-prompt .title {
+        font-size: 2rem;
+    }
+    
+    .join-prompt h2 {
+        font-size: 1.3rem;
+    }
+    
+    .join-prompt p {
+        font-size: 1rem;
+    }
+    
+    .join-link-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+} 
