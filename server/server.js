@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
             id: socket.id,
             name: name,
             team: null,
-            role: null
+            spy: null
         };
 
         if (!rooms.has(room)) {
@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
             createGame(room)
         }
 
-        socket.emit('create game', rooms.get(room));
+        socket.emit('create game', rooms.get(room), player);
         console.log(rooms.get(room).players);
         // io.to(room).emit('update players', JSON.stringify(players));
     });
@@ -134,16 +134,31 @@ io.on('connection', (socket) => {
         io.to(room).emit('change turn', team);
     });
 
-    // socket.on('join team', (team, role) => {
-    //     // const room = rooms.find(r => r.players.find(p => p.id === socket.id))
-    //     const room = findRoom(socket.id);
-    //     const player = room.players.find(p => p.id === socket.id);
-    //     if (player) {
-    //         player.team = team;
-    //         player.role = role;
-    //         io.to(player.room).emit('update players', players);
-    //     }
-    // });
+    socket.on('join team', (team, spy) => {
+        const room = findRoom(socket.id);
+        if (!room) return;
+        
+        const roomData = rooms.get(room);
+        const player = roomData.players.find(p => p.id === socket.id);
+        if (!player) return;
+        
+        // Check if trying to become spymaster
+        if (spy === true) {
+            const existingSpymasters = roomData.players.filter(p => 
+                p.team === team && p.spy === true
+            ).length;
+            
+            if (existingSpymasters > 0) {
+                // socket.emit('join team error', 'This team already has a spymaster');
+                return;
+            }
+        }
+        
+        player.team = team;
+        player.spy = spy;
+        console.log(player);
+        socket.emit('update player', player);
+    });
 
 });
 
@@ -154,9 +169,11 @@ function createGame(room) {
         "PAPER", "PHONE", "RING", "SHIP", "FISH"
     ];
 
+    // Randomize team counts - either red:9/blue:8 or red:8/blue:9
+    const redStarts = Math.random() < 0.5;
     const teamCounts = {
-        red: 9,
-        blue: 8,
+        red: redStarts ? 9 : 8,
+        blue: redStarts ? 8 : 9,
         yellow: 5,
         grey: 2,
         black: 1
@@ -183,7 +200,10 @@ function createGame(room) {
             revealed: false,
         });
     }
+    
     rooms.get(room).cards = generated;
+    rooms.get(room).redLeft = redStarts ? 9 : 8;
+    rooms.get(room).blueLeft = redStarts ? 8 : 9;
 }
 
 server.listen(port, function () {

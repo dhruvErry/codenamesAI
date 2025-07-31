@@ -2,7 +2,7 @@ import './Card.css';
 import { useAtomValue } from 'jotai';
 import { themeAtom } from '../Atoms';
 
-function Card({ word, team, clicked, revealed, spy, onClick, onContextMenu }) {
+function Card({ word, team, clicked, revealed, onClick, onContextMenu }) {
   const theme = useAtomValue(themeAtom);
   
   function getClassName() {
@@ -10,7 +10,8 @@ function Card({ word, team, clicked, revealed, spy, onClick, onContextMenu }) {
     if (revealed) base = 'card-revealed';
     else if (clicked) base = 'card-clicked';
 
-    const teamClass = spy || revealed ? ` ${team}` : '';
+    // Show team color to spymasters even if card is not revealed
+    const teamClass = revealed ? ` ${team}` : '';
     return base + teamClass + ` ${theme}`;
   }
 

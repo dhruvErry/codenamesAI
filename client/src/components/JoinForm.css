@@ -12,7 +12,7 @@
 }
 
 .container-form.dark {
-  background: linear-gradient(135deg, #B00000 0%, #004499 100%);
+  background: linear-gradient(135deg, #D00000 0%, #0066CC 50%, #009900 100%);
 }
 
 /* Inner form box */
@@ -129,6 +129,15 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
+}
+
+/* Dark mode loading text */
+.container-form.dark .loading {
+  color: rgb(255, 255, 255);
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: none;
 }
 
 /* .form-textarea {

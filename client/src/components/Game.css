@@ -28,15 +28,25 @@
 }
 
 .team {
-    width: 10vw;
-    min-width: 100px;
+    width: 15vw;
+    min-width: 150px;
     align-self: stretch;
+    display: flex;
+    align-items: center;
     /* height: 100vh; */
+}
+
+.team.red {
+    justify-content: flex-end;
+}
+
+.team.blue {
+    justify-content: flex-start;
 }
 
 .title {
     font-size: 3.5em;
-    margin: 0 0 0.6em 0;
+    margin: 0 0 0.4em 0;
     letter-spacing: .2em;
     text-align: center;
 }

@@ -1,9 +1,16 @@
 .container-team {
     display: flex;
-    /* justify-content: space-between; */
-    align-content: center;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
     height: 100%;
+}
+
+.container-team.red {
+    justify-content: center;
+}
+
+.container-team.blue {
+    justify-content: flex-end;
 }
 
 .team-names {
@@ -11,24 +18,141 @@
     flex-direction: column;
 }
 
-.score {
+.score-box {
     padding: 1em;
     color: white;
     display: flex;
-    /* justify-content: center; */
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: transparent;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 100px;
+    gap: 0.5em;
+    height: 120px;
+}
+
+/* Light mode styling */
+.game-container.light .score-box {
+    /* background: rgba(255, 255, 255, 0.9); */
+    border-radius: 12px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    border: none;
+    transition: all 0.3s ease;
+}
+
+/* Dark mode background */
+.game-container.dark .score-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    max-height: 60px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Dark mode - hide button area by default */
+.game-container.dark .score-box {
+    padding: 1em;
+    justify-content: center;
+}
+
+/* Dark mode hover - show full container with button */
+.game-container.dark .score-box:hover {
+    gap: 0.5em;
+    max-height: 120px;
 }
 
 .redTeam {
-    background-color: red;
-    height: 50%;
+    color: red;
 }
 
 .blueTeam {
-    background-color: blue;
-    height: 50%;
+    color: blue;
+}
+
+.game-container.dark .redTeam {
+    color: #ff3737;
+}
+
+.game-container.dark .blueTeam {
+    color: #1692ff;
 }
 
 .number {
     font-size: 2em;
+    font-weight: bold;
+    margin-top: 0;
+    flex-shrink: 0;
 }
+
+.join-team-button {
+    padding: 0.5em 1em;
+    background: rgba(255, 255, 255, 0.15);
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode button styling */
+.game-container.light .join-team-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #888;
+    border-radius: 6px;
+    padding: 0.8em 1.2em;
+    margin: 0.3em 0;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+/* Dark mode button text */
+.game-container.dark .join-team-button {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+/* Dark mode - hide button by default */
+.game-container.dark .join-team-button {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    position: absolute;
+    bottom: -40px;
+}
+
+/* Show button on hover (higher specificity for dark mode) */
+.game-container.dark .score-box:hover .join-team-button {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+    bottom: 0;
+}
+
+/* Light mode hover */
+.score-box:hover .join-team-button {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.join-team-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Light mode button hover */
+.game-container.light .join-team-button:hover {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+

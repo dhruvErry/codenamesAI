@@ -5,7 +5,7 @@ import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
-import { socketAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom } from "../Atoms";
+import { socketAtom, cluesAtom, playerAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom } from "../Atoms";
 import { useLocation, Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ThemeToggle from './ThemeToggle';
@@ -23,6 +23,7 @@ function Game() {
     const name = location.state?.name;
     const [redTurn, setRedTurn] = useAtom(redTurnAtom);
     const theme = useAtomValue(themeAtom);
+    const [player, setPlayer] = useAtom(playerAtom);
 
     // useEffect(() => {
     //     const words = [
@@ -65,14 +66,23 @@ function Game() {
     // }, []);
 
     useEffect(() => {
-        socket.on("create game", (room) => {
+        socket.on("create game", (room, player) => {
             setCards(room.cards);
             setClues(room.clues);
             setActiveClueIndex(room.activeClueIndex);
             setRedTurn(room.redTurn);
-            console.log("Received create game, redTurn:", room.redTurn);
+            setRedLeft(room.redLeft);
+            setBlueLeft(room.blueLeft);
+            setPlayer(player);
         })
         return () => { socket.off("create game") }
+    }, [socket])
+
+    useEffect(() => {
+        socket.on("update player", (player) => {
+            setPlayer(player);
+        })
+        return () => { socket.off("update player") }
     }, [socket])
 
     useEffect(() => {
@@ -127,6 +137,7 @@ function Game() {
                     });
                 }
             }
+            console.log(gameState.redLeft, gameState.blueLeft);
             setCards(gameState.cards);
             setRedTurn(gameState.redTurn);
             setRedLeft(gameState.redLeft);
@@ -161,14 +172,11 @@ function Game() {
     return (
         <div className={`game-container ${theme}`}>
             <ThemeToggle />
-            {/* <div className= 'team'>
+            <div className= 'team red'>
                 <TeamPanel
-                    redLeft={redLeft} 
-                    blueLeft={blueLeft}    
-                    // onEndTurn={() => {}}
-                    // onReset={() => {}}
+                    color = "red"
                 />
-            </div>/ */}
+            </div>
             <div className='vertical-container'>
                 <div className= 'title' style={{ color: '#009900' }}>
                     CODEN
@@ -187,14 +195,11 @@ function Game() {
                     <Clue clues={clues} activeClueIndex={activeClueIndex} />
                 </div>
             </div>
-            {/* <div className= 'team'>
+            <div className= 'team blue'>
                 <TeamPanel
-                    redLeft={redLeft} 
-                    blueLeft={blueLeft}    
-                    // onEndTurn={() => {}}
-                    // onReset={() => {}}
+                    color = "blue"
                 />
-            </div> */}
+            </div>
         </div>
     );
 }

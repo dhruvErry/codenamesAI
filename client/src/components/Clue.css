@@ -133,6 +133,33 @@
 
 } */
 
+/* Waiting clue message styling */
+.waiting-clue {
+    font-size: 1.2em;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 1em 2em;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+/* Light mode waiting message */
+.game-container.light .waiting-clue {
+    background: rgba(255, 255, 255, 0.1);
+    color: #888;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark mode waiting message */
+.game-container.dark .waiting-clue {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f0f0f0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 @media screen and (min-width: 1281px) {
 
     .clue-container {
