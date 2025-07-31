@@ -6,9 +6,9 @@ import './Game.css'
 import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
 import { socketAtom, cluesAtom, playerAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom } from "../Atoms";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import ThemeToggle from './ThemeToggle';
+import SettingsPopup from './SettingsPopup';
 
 function Game() {
     const socket = useAtomValue(socketAtom)
@@ -19,7 +19,8 @@ function Game() {
     const [redLeft, setRedLeft] = useAtom(redLeftAtom);
     const [blueLeft, setBlueLeft] = useAtom(blueLeftAtom);
     const location = useLocation();
-    const room = location.state?.room;
+    const { roomName } = useParams(); // Get room name from URL
+    const room = roomName || location.state?.room; // Use URL param or fallback to state
     const name = location.state?.name;
     const [redTurn, setRedTurn] = useAtom(redTurnAtom);
     const theme = useAtomValue(themeAtom);
@@ -86,11 +87,20 @@ function Game() {
     }, [socket])
 
     useEffect(() => {
-        if (room && name) {
-            console.log("Emitting join room", room, name);
-            socket.emit("join room", room, name);
+        if (room) {
+            console.log("Emitting join room", room, name || "Anonymous");
+            socket.emit("join room", room, name || "Anonymous");
         }
-    }, [])
+    }, [room, name, socket])
+
+    useEffect(() => {
+        socket.on("room not found", (roomName) => {
+            console.log("Room not found:", roomName);
+            // Redirect to home page
+            window.location.href = "/";
+        });
+        return () => { socket.off("room not found") }
+    }, [socket])
 
     useEffect(() => {
         socket.on("clue", (clue, number, index) => {
@@ -103,7 +113,7 @@ function Game() {
     useEffect(() => {
         socket.on("right clicked", (index) => {
             const updated = [...cards];
-            updated[index].clicked = !updated[index].clicked;
+            updated[index].rightClicked = !updated[index].rightClicked;
             setCards(updated);  
         })
         return () => { socket.off("right clicked") }
@@ -131,19 +141,33 @@ function Game() {
                     });
                 } else if (card.team === 'black') {
                     Swal.fire({
-                        text: "Game over, you've lost!",
+                        text: `Game over${redTurn ? 'Red' : 'Blue'} team has lost!`,
                         icon: 'error',
-                        confirmButtonText: "Oh, no."
+                        confirmButtonText: "Oh!"
                     });
                 }
             }
-            console.log(gameState.redLeft, gameState.blueLeft);
-            setCards(gameState.cards);
-            setRedTurn(gameState.redTurn);
-            setRedLeft(gameState.redLeft);
-            setBlueLeft(gameState.blueLeft);
-            setClues(gameState.clues);
-            setActiveClueIndex(gameState.activeClueIndex);
+            if (gameState.redLeft === 0) {
+                Swal.fire({
+                    text: "Game over, the Red team has won!",
+                    icon: 'success',
+                    confirmButtonText: "Oh!"
+                });
+            } else if (gameState.blueLeft === 0) {
+                Swal.fire({
+                    text: "Game over, the Blue team has won!",
+                    icon: 'success',
+                    confirmButtonText: "Oh!"
+                });
+            }
+            else {
+                setCards(gameState.cards);
+                setRedTurn(gameState.redTurn);
+                setRedLeft(gameState.redLeft);
+                setBlueLeft(gameState.blueLeft);
+                setClues(gameState.clues);
+                setActiveClueIndex(gameState.activeClueIndex);
+            }
         })
         return () => { socket.off("update game") }
     }, [socket])
@@ -165,13 +189,13 @@ function Game() {
     }  
     
     // Redirect to home if no room data
-    if (!room || !name) {
+    if (!room) {
         return <Navigate to="/" replace />;
     }
     
     return (
         <div className={`game-container ${theme}`}>
-            <ThemeToggle />
+            <SettingsPopup />
             <div className= 'team red'>
                 <TeamPanel
                     color = "red"

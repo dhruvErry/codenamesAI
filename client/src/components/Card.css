@@ -20,12 +20,15 @@
     border: none;
 }
 
-.card.light:hover, .card-clicked.light:hover {
+/* Background hover effects only for cards without team colors (not visible) */
+.card.light:not(.red):not(.blue):not(.yellow):not(.grey):not(.black):hover, 
+.card-clicked.light:not(.red):not(.blue):not(.yellow):not(.grey):not(.black):hover {
     background-color: lightgrey !important;
     transition: background-color 0.2s ease, border 0.8s ease-in;
 }
 
-.card.dark:hover, .card-clicked.dark:hover {
+.card.dark:not(.red):not(.blue):not(.yellow):not(.grey):not(.black):hover, 
+.card-clicked.dark:not(.red):not(.blue):not(.yellow):not(.grey):not(.black):hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
     transition: background-color 0.2s ease, border 0.8s ease-in;
 }
@@ -44,7 +47,37 @@
 .card.grey, .card-clicked.grey, .card-revealed.grey { background-color: grey; transition: background-color 4s; }
 .card.black, .card-clicked.black, .card-revealed.black { background-color: black; transition: background-color 4s; }
 
+/* Font color changes for clicked cards */
+.card-clicked.red .word {
+    color: red;
+    transition: color 0.3s ease;
+}
 
+.card-clicked.blue .word {
+    color: blue;
+    transition: color 0.3s ease;
+}
+
+.card-clicked.yellow .word {
+    color: orange;
+    transition: color 0.3s ease;
+}
+
+.card-clicked.grey .word {
+    color: grey;
+    transition: color 0.3s ease;
+}
+
+.card-clicked.black .word {
+    color: black;
+    transition: color 0.3s ease;
+}
+
+/* Hover effects for revealed cards - animate text back to white */
+.card-revealed:hover .word {
+    color: white !important;
+    transition: color 0.3s ease;
+}
 
 /* @media screen and (min-width: 1281px) {
 

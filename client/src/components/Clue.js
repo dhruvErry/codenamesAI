@@ -28,6 +28,18 @@ function Clue() {
     const hasClue = activeClueIndex !== null && clues[activeClueIndex];
     const isMyTurn = (redTurn && player?.team === 'red') || (!redTurn && player?.team === 'blue');
     
+    const renderButton = () => {
+        if (isMyTurn && !isSpymaster) {
+            return (
+                <form onSubmit = {endTurn}>
+                    <button className = 'clue-button end-turn-button' style={{ background: redTurn ? 'red' : 'blue' }}>End Turn</button>
+                </form>
+            )
+        } else {
+            return null;
+        }
+    }
+
     // Show clue normally
     if (hasClue) {
         return (
@@ -36,12 +48,7 @@ function Clue() {
                     {clues[activeClueIndex].clue.toUpperCase()} {'\u00A0'} {clues[activeClueIndex].number}
                 </div>
                 <div className = 'clue-bottom'>
-                    <form onSubmit = {endTurn}>
-                        <button
-                            className = 'clue-button end-turn-button'
-                            style={{ background: redTurn ? 'red' : 'blue' }}
-                        >End Turn</button>
-                    </form>
+                    {renderButton()}
                 </div>
             </div>
         );

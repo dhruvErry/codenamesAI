@@ -17,8 +17,9 @@ function Board({ cards, onCardRightClick, onCardClick}) {
                     key={i}
                     word={card.word}
                     team={card.team}
-                    clicked={card.clicked}
-                    revealed={isSpymaster ? true : card.revealed}
+                    rightClicked={card.rightClicked}
+                    revealed={card.revealed}
+                    visible={isSpymaster}
                     onClick={isSpymaster || card.revealed ? () => {} : () => onCardClick(i)}
                     onContextMenu={isSpymaster || card.revealed ? () => {} : (e) => onCardRightClick(e, i)}
                 />

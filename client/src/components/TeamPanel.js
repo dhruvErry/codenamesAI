@@ -2,11 +2,13 @@ import './TeamPanel.css';
 import { socketAtom, redLeftAtom, blueLeftAtom, playerAtom } from '../Atoms';
 import { useAtomValue } from 'jotai';
 import { useState, useEffect } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 function TeamPanel({color}) {
     const { state } = useLocation();
-    const { room, name } = state;
+    const { roomName } = useParams();
+    const room = roomName || state?.room;
+    const name = state?.name;
     const socket = useAtomValue(socketAtom)
     const redLeft = useAtomValue(redLeftAtom)
     const blueLeft = useAtomValue(blueLeftAtom)

@@ -24,8 +24,8 @@ function JoinForm () {
         e.preventDefault()
         const room = e.target[0].value
         const name = e.target[1].value
-        navigate('/game', {
-            state: {room, name}
+        navigate(`/${room}`, {
+            state: {name}
         });
         // Do NOT emit here
     }    

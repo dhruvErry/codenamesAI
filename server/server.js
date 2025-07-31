@@ -37,6 +37,17 @@ io.on('connection', (socket) => {
     });
     
     socket.on('join room', (room, name) => {
+        // Check if room exists
+        if (!rooms.has(room)) {
+            // Only create room if player has a proper name (not "Anonymous")
+            if (!name || name === "Anonymous") {
+                socket.emit('room not found', room);
+                return;
+            }
+            // Create the room
+            rooms.set(room, {players: [], cards: [], redTurn: true, clues: [], activeClueIndex: -1, redLeft: 0, blueLeft: 0});
+        }
+
         // Remove duplicate players
         const player = {
             id: socket.id,
@@ -45,12 +56,9 @@ io.on('connection', (socket) => {
             spy: null
         };
 
-        if (!rooms.has(room)) {
-            rooms.set(room, {players: [], cards: [], redTurn: true, clues: [], activeClueIndex: -1})
-        }
         // Only add player if not already present
         if (!rooms.get(room).players.some(p => p.id === socket.id)) {
-        rooms.get(room).players.push(player);
+            rooms.get(room).players.push(player);
         }
         socket.join(room)
 
@@ -73,7 +81,7 @@ io.on('connection', (socket) => {
             justRevealedIndex = index;
         }
         card.revealed = true;
-        card.clicked = false;
+        card.rightClicked = false;
         if (card.team === 'red') {
             game.redLeft -= 1;
             if (!game.redTurn) {
@@ -111,7 +119,7 @@ io.on('connection', (socket) => {
         // const room = rooms.find(r => r.roomName === r.players.find(p => p.id === socket.id).roomName)
         const room = findRoom(socket.id);
         if (!room) return;
-        rooms.get(room).cards[index].clicked = !rooms.get(room).cards[index].clicked;
+        rooms.get(room).cards[index].rightClicked = !rooms.get(room).cards[index].rightClicked;
             io.to(room).emit('right clicked', index);
     })
 
@@ -196,8 +204,9 @@ function createGame(room) {
         generated.push({
             word: shuffledWords[i],
             team: shuffledTeams[i],
-            clicked: false,
+            rightClicked: false,
             revealed: false,
+            visible: false,
         });
     }
     

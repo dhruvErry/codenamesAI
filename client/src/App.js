@@ -13,6 +13,7 @@ function App() {
         <Route path="" element={<Home/>} />
         <Route path="/join" element={<JoinForm/>} />
         <Route path="/game" element={<Game/>} />
+        <Route path="/:roomName" element={<Game/>} />
       </Routes>
     </BrowserRouter>
     </>

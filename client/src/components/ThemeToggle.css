@@ -15,6 +15,14 @@
     overflow: hidden;
 }
 
+/* Theme toggle inside settings popup */
+.settings-popup .theme-toggle {
+    position: static;
+    width: 40px;
+    height: 40px;
+    z-index: auto;
+}
+
 .theme-toggle.light {
     background: linear-gradient(135deg, #B00000 0%, #004499 100%);
 }
