@@ -32,6 +32,7 @@
 .github-button img {
   width: 24px;
   height: auto;
+  filter: brightness(1.5) contrast(0.8);
 }
 
 .settings-button {
@@ -86,6 +87,7 @@
   margin: 0;
   font-size: 16px;
   font-weight: 400;
+  color: #808080;
 }
 
 .close-button {
@@ -126,6 +128,7 @@
 .setting-item label {
   font-weight: 500;
   font-size: 14px;
+  color: #808080;
 }
 
 /* Dark theme styles with simple glass effect */

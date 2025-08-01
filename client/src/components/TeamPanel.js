@@ -35,10 +35,10 @@ function TeamPanel({color}) {
             return (
                 <>
                     <button className="join-team-button" onClick={() => socket.emit("join team", color, false)}>
-                        Join as Operative
+                        Operative
                     </button>
                     <button className="join-team-button" onClick={() => socket.emit("join team", color, true)}>
-                        Join as Spymaster
+                        SpyMaster
                     </button>
                 </>
             );
@@ -50,14 +50,14 @@ function TeamPanel({color}) {
                 // Currently spymaster, show option to join as operative
                 return (
                     <button className="join-team-button" onClick={() => socket.emit("join team", color, false)}>
-                        Join as Operative
+                        Operative
                     </button>
                 );
             } else {
                 // Currently operative, show option to join as spymaster
                 return (
                     <button className="join-team-button" onClick={() => socket.emit("join team", color, true)}>
-                        Join as Spymaster 
+                        SpyMaster
                     </button>
                 );
             }

@@ -66,6 +66,9 @@
 .game-container.dark .score-box:hover {
     gap: 0.5em;
     max-height: 120px;
+    width: 85px;
+    margin-left: -7.5px;
+    margin-right: -7.5px;
 }
 
 .redTeam {
@@ -98,10 +101,10 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.65em;
+    font-size: .9em;
     font-weight: 500;
     transition: all 0.3s ease;
-    width: 100%;
+    /* width: 100%; */
     opacity: 0;
     transform: translateY(10px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
