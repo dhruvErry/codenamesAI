@@ -28,8 +28,8 @@
 }
 
 .team {
-    width: 15vw;
-    min-width: 150px;
+    width: 10vw;
+    min-width: 100px;
     align-self: stretch;
     display: flex;
     align-items: center;
@@ -38,10 +38,12 @@
 
 .team.red {
     justify-content: flex-end;
+    padding-right: 5px;
 }
 
 .team.blue {
     justify-content: flex-start;
+    padding-left: 5px;
 }
 
 .title {

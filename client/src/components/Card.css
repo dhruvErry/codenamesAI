@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     border-radius: .5em;
-    font-size: 1.5em;
+    font-size: 1.4em;
     letter-spacing: 0.07em;
     transition: all 0.3s ease;
 }
@@ -98,5 +98,4 @@
     .card-clicked {
         font-size: 1.5em;
     }
-
 } */

@@ -35,7 +35,7 @@
 
 .settings-popup {
   position: absolute;
-  top: 50px;
+  top: 55px;
   right: 0;
   background: beige;
   border: 1px solid #ccc;
@@ -56,7 +56,7 @@
 .settings-header h3 {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .close-button {
@@ -99,10 +99,11 @@
   font-size: 14px;
 }
 
-/* Dark theme styles */
+/* Dark theme styles with simple glass effect */
 .dark .settings-popup {
-  background: transparent;
-  border-color: #444;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 

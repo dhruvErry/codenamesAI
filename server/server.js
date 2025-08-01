@@ -29,6 +29,22 @@ function findRoom(socketID){
     return null;
 }
 
+function swapColor(game){
+    for (let i = 0; i < game.cards.length; i++) {
+        const card = game.cards[i];
+        if (card.team === 'yellow'){
+            card.team = game.redTurn ? 'red' : 'blue';
+            if (game.redTurn) {
+                game.redLeft++;
+            } else {
+                game.blueLeft++;
+            }
+            return
+        }
+    }
+    // return false;
+}
+
 io.on('connection', (socket) => {
     console.log(socket.id, 'user connected');
 
@@ -45,7 +61,7 @@ io.on('connection', (socket) => {
                 return;
             }
             // Create the room
-            rooms.set(room, {players: [], cards: [], redTurn: true, clues: [], activeClueIndex: -1, redLeft: 0, blueLeft: 0});
+            rooms.set(room, {players: [], cards: [], redTurn: false, clues: [], activeClueIndex: -1, redLeft: -1, blueLeft: -1, yellowClicks: 0});
         }
 
         // Remove duplicate players
@@ -80,29 +96,46 @@ io.on('connection', (socket) => {
         if (!card.revealed) {
             justRevealedIndex = index;
         }
+        
+        // Track yellow card clicks (regardless of revealed status)
+        if (card.team === 'yellow' && game.yellowClicks < 5) {
+            game.yellowClicks++;
+            
+            // When 5 yellow cards are clicked, convert unrevealed grey cards to yellow
+            if (game.yellowClicks === 5) {
+                game.cards.forEach(c => {
+                    if (c.team === 'grey' && !c.revealed) {
+                        c.team = 'yellow';
+                    }
+                });
+            }
+        }
+        
         card.revealed = true;
         card.rightClicked = false;
+        
+        if (card.team != (game.redTurn ? 'red' : 'blue')) {
+            game.activeClueIndex = null;
+        }
+
         if (card.team === 'red') {
             game.redLeft -= 1;
             if (!game.redTurn) {
                 game.redTurn = true;
-                game.activeClueIndex = null;
             }
         } else if (card.team === 'blue') {
             game.blueLeft -= 1;
             if (game.redTurn) {
                 game.redTurn = false;
-                game.activeClueIndex = null;
             }
         } else if (card.team === 'grey') {
-            game.redTurn = !game.redTurn;
-            game.activeClueIndex = null;
+            swapColor(game)
         } else if (card.team === 'black') {
             // Optionally handle game over logic
         } else {
             game.redTurn = !game.redTurn;
-            game.activeClueIndex = null;
         }
+        
         io.to(room).emit('update game', {
             cards: game.cards,
             redTurn: game.redTurn,
@@ -110,13 +143,13 @@ io.on('connection', (socket) => {
             blueLeft: game.blueLeft,
             clues: game.clues,
             activeClueIndex: game.activeClueIndex,
-            justRevealedIndex
+            justRevealedIndex,
         });
     });
 
     socket.on('right clicked', (index) => {
         // const player = players.find(p => p.id === socket.id);
-        // const room = rooms.find(r => r.roomName === r.players.find(p => p.id === socket.id).roomName)
+        // const room = rooms.find(r => r.players.find(p => p.id === socket.id).roomName)
         const room = findRoom(socket.id);
         if (!room) return;
         rooms.get(room).cards[index].rightClicked = !rooms.get(room).cards[index].rightClicked;
@@ -172,10 +205,11 @@ io.on('connection', (socket) => {
 
 function createGame(room) {
     const words = [
-        "ANJEL", "TREE", "BOMB", "CAR", "BOOK", "DOG", "HOUSE", "SUN", "MOON", "FIRE",
-        "WATER", "MOUSE", "KEY", "DOOR", "PLANE", "CLOUD", "APPLE", "GOLD", "SALT", "IRON",
-        "PAPER", "PHONE", "RING", "SHIP", "FISH"
-    ];
+        "BIG", "DOCUMENT", "LEATHER", "GLACIER", "CELL", "AXIS", "DAYLIGHT", "FALLS", "JUNIOR", "CORPORATION",
+        "DRIVE", "CHILLY", "GUZZLING", "DUMP", "AMBIDEXTROUS", "COMFORTABLE", "CANDY", "DISTANT", "CONTENT", "NUMERIC",
+        "GRADE", "DESCRIBES", "CHANNEL", "ESSENCE", "GEOMETRICAL", "LEGION", "CRASHER", "ENEMIES", "HUMANLY", "HOOLIGAN",
+        "FREAK", "FIGHTING", "EVEN", "EXCLUSIVE", "DATA", "GANGLAND"
+      ];      
 
     // Randomize team counts - either red:9/blue:8 or red:8/blue:9
     const redStarts = Math.random() < 0.5;
@@ -213,6 +247,7 @@ function createGame(room) {
     rooms.get(room).cards = generated;
     rooms.get(room).redLeft = redStarts ? 9 : 8;
     rooms.get(room).blueLeft = redStarts ? 8 : 9;
+    rooms.get(room).redTurn = redStarts 
 }
 
 server.listen(port, function () {

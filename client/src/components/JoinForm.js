@@ -23,7 +23,7 @@ function JoinForm () {
     function handleSubmit (e) {
         e.preventDefault()
         const room = e.target[0].value
-        const name = e.target[1].value
+        const name = "Player" + Math.floor(Math.random() * 1000) // Generate random player name
         navigate(`/${room}`, {
             state: {name}
         });
@@ -57,8 +57,8 @@ function JoinForm () {
                         MS
                     </div>
                     <form className="join-form" onSubmit = {handleSubmit}>
-                        <input className="form-input" placeholder = "Enter Room" id = "room" required/>
-                        <input className="form-input" placeholder = "Enter Your Name" id = "name" required/>
+                        <input className="form-input" placeholder = "Enter Room" id = "room" required autoFocus/>
+                        {/* <input className="form-input" placeholder = "Enter Your Name" id = "name" required/> */}
                         <button className="form-button" type="submit">Create or Join Game</button>
                     </form>
                 </div>
