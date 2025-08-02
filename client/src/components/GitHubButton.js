@@ -6,7 +6,7 @@ function GitHubButton() {
     <div className="github-container">
       <button className="github-button" onClick={() => window.open('https://github.com/dhruvErry/codenamesAI/', '_blank')}>
         <img 
-          src="https://cdn.creazilla.com/icons/3255989/github-icon-lg.png" 
+          src="/gitHub.png" 
           alt="GitHub" 
         />
       </button>

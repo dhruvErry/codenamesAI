@@ -133,11 +133,11 @@ function Game() {
             const revealedIndex = gameState.justRevealedIndex;
             if (revealedIndex !== null && revealedIndex !== undefined) {
                 const card = gameState.cards[revealedIndex];
-                if (card.team === 'grey') {
+                if (card.team === 'grey' && gameState.swapped) {
                     Swal.fire({
-                        text: "A neutral card has been converted into a card of your color!",
+                        text: `A neutral card has been converted into a card of the ${redTurn ? 'red' : 'blue'} team's color!`,
                         icon: 'info',
-                        confirmButtonText: "That's a shame."
+                        confirmButtonText: player?.team === (redTurn ? 'red' : 'blue') ? "Alright!" : "That's a shame."
                     });
                 } else if (card.team === 'black') {
                     Swal.fire({

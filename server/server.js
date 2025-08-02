@@ -39,10 +39,10 @@ function swapColor(game){
             } else {
                 game.blueLeft++;
             }
-            return
+            return true
         }
     }
-    // return false;
+    return false;
 }
 
 io.on('connection', (socket) => {
@@ -88,6 +88,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('card clicked', (index) => {
+        let swapped = false;
         const room = findRoom(socket.id);
         if (!room) return;
         const game = rooms.get(room);
@@ -129,7 +130,8 @@ io.on('connection', (socket) => {
                 game.redTurn = false;
             }
         } else if (card.team === 'grey') {
-            swapColor(game)
+            swapped = swapColor(game)
+            game.redTurn = !game.redTurn;
         } else if (card.team === 'black') {
             // Optionally handle game over logic
         } else {
@@ -144,6 +146,7 @@ io.on('connection', (socket) => {
             clues: game.clues,
             activeClueIndex: game.activeClueIndex,
             justRevealedIndex,
+            swapped
         });
     });
 
