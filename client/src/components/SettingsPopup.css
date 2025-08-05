@@ -45,11 +45,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.5s ease;
 }
 
 .settings-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.settings-button.rotated {
+  transform: rotate(90deg);
 }
 
 .settings-button img {
@@ -126,9 +130,31 @@
 }
 
 .setting-item label {
-  font-weight: 500;
   font-size: 14px;
-  color: #808080;
+  font-weight: 500;
+  color: inherit;
+  margin-right: 10px;
+}
+
+.new-game-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background: linear-gradient(135deg, #D00000 0%, #B00000 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(208, 0, 0, 0.3);
+}
+
+.new-game-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(208, 0, 0, 0.4);
+}
+
+.new-game-button:active {
+  transform: translateY(0);
 }
 
 /* Dark theme styles with simple glass effect */

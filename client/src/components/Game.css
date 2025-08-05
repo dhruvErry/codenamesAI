@@ -68,12 +68,44 @@
 }
 
 .swal2-container {
-    display: inline-block;
-    padding-top: 16.5em;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
 }
 
 .swal2-popup {
-    width: 42em;    
+    width: 42em !important;
+    margin: 0 !important;
+}
+
+.game-over-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    margin-bottom: 4.5em;
+}
+
+.game-over-message button {
+    padding: 0.5em 1.5em;
+    font-size: 1.5em;
+    background: linear-gradient(135deg, #D00000 0%, #B00000 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(208, 0, 0, 0.3);
+}
+
+.game-over-message button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(208, 0, 0, 0.4);
+}
+
+.game-over-message button:active {
+    transform: translateY(0);
 }
 
 .swal2-confirm {

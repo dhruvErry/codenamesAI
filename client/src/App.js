@@ -1,5 +1,4 @@
 import './App.css';
-import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import JoinForm  from './components/JoinForm';

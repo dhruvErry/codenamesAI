@@ -43,6 +43,7 @@
     max-height: 60px;
     /* overflow: hidden; */
     position: relative;
+    justify-content: flex-start;
 }
 
 /* Dark mode background */

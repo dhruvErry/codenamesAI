@@ -93,10 +93,7 @@ io.on('connection', (socket) => {
         if (!room) return;
         const game = rooms.get(room);
         const card = game.cards[index];
-        let justRevealedIndex = null;
-        if (!card.revealed) {
-            justRevealedIndex = index;
-        }
+        const clickedTeam = card.team; // Store the team color before any changes
         
         // Track yellow card clicks (regardless of revealed status)
         if (card.team === 'yellow' && game.yellowClicks < 5) {
@@ -133,7 +130,7 @@ io.on('connection', (socket) => {
             swapped = swapColor(game)
             game.redTurn = !game.redTurn;
         } else if (card.team === 'black') {
-            // Optionally handle game over logic
+            // do nothing
         } else {
             game.redTurn = !game.redTurn;
         }
@@ -145,7 +142,7 @@ io.on('connection', (socket) => {
             blueLeft: game.blueLeft,
             clues: game.clues,
             activeClueIndex: game.activeClueIndex,
-            justRevealedIndex,
+            clickedTeam,
             swapped
         });
     });
@@ -175,11 +172,18 @@ io.on('connection', (socket) => {
         const game = rooms.get(room);
         game.redTurn = (team === 'red');
         game.activeClueIndex = null;
+        
+        // Clear all right clicks when turn changes
+        game.cards.forEach(card => {
+            card.rightClicked = false;
+        });
+        
         io.to(room).emit('change turn', team);
     });
 
     socket.on('join team', (team, spy) => {
         const room = findRoom(socket.id);
+        console.log(room)
         if (!room) return;
         
         const roomData = rooms.get(room);
@@ -202,6 +206,24 @@ io.on('connection', (socket) => {
         player.spy = spy;
         console.log(player);
         socket.emit('update player', player);
+    });
+
+    socket.on('new game', (roomName) => {
+        const room = findRoom(socket.id);
+        if (!room) return;
+        
+        // Reset game state
+        const game = rooms.get(room);
+        game.redTurn = false;
+        game.clues = [];
+        game.activeClueIndex = -1;
+        game.yellowClicks = 0;
+        
+        // Create new game
+        createGame(room);
+        
+        // Emit new game state to all players in room using same event
+        io.to(room).emit('create game', game, null);
     });
 
 });

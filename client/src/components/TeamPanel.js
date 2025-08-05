@@ -1,7 +1,6 @@
 import './TeamPanel.css';
 import { socketAtom, redLeftAtom, blueLeftAtom, playerAtom } from '../Atoms';
 import { useAtomValue } from 'jotai';
-import { useState, useEffect } from 'react';
 import { useLocation, useParams } from "react-router-dom";
 
 function TeamPanel({color}) {

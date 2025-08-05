@@ -5,9 +5,8 @@ import Clue from './Clue';
 import './Game.css'
 import Swal from 'sweetalert2'
 import { useAtom, useAtomValue } from "jotai";
-import { socketAtom, cluesAtom, playerAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom } from "../Atoms";
+import { socketAtom, cluesAtom, playerAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, themeAtom, gameOverAtom } from "../Atoms";
 import { useLocation, Navigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import SettingsPopup from './SettingsPopup';
 
 function Game() {
@@ -18,6 +17,7 @@ function Game() {
     const [spy, setSpy] = useState(false);
     const [redLeft, setRedLeft] = useAtom(redLeftAtom);
     const [blueLeft, setBlueLeft] = useAtom(blueLeftAtom);
+    const [gameOver, setGameOver] = useAtom(gameOverAtom);
     const location = useLocation();
     const { roomName } = useParams(); // Get room name from URL
     const room = roomName || location.state?.room; // Use URL param or fallback to state
@@ -74,7 +74,10 @@ function Game() {
             setRedTurn(room.redTurn);
             setRedLeft(room.redLeft);
             setBlueLeft(room.blueLeft);
-            setPlayer(player);
+            if (player) {
+                setPlayer(player);
+            }
+            setGameOver(false); // Reset game over state when new game is created
         })
         return () => { socket.off("create game") }
     }, [socket])
@@ -124,53 +127,73 @@ function Game() {
             console.log("Received change turn, setting redTurn to:", team);
             setRedTurn(team === 'red');
             setActiveClueIndex(null);
+            
+            // Clear all right clicks when turn changes
+            setCards(prevCards => prevCards.map(card => ({
+                ...card,
+                rightClicked: false
+            })));
         })
         return () => { socket.off("change turn") }
     }, [socket])
 
     useEffect(() => {
         socket.on("update game", (gameState) => {
-            const revealedIndex = gameState.justRevealedIndex;
-            if (revealedIndex !== null && revealedIndex !== undefined) {
-                const card = gameState.cards[revealedIndex];
-                if (card.team === 'grey' && gameState.swapped) {
-                    Swal.fire({
-                        text: `A neutral card has been converted into a card of the ${redTurn ? 'red' : 'blue'} team's color!`,
-                        icon: 'info',
-                        confirmButtonText: player?.team === (redTurn ? 'red' : 'blue') ? "Alright!" : "That's a shame."
-                    });
-                } else if (card.team === 'black') {
-                    Swal.fire({
-                        text: `Game over${redTurn ? 'Red' : 'Blue'} team has lost!`,
-                        icon: 'error',
-                        confirmButtonText: "Oh!"
-                    });
-                }
+            const clickedTeam = gameState.clickedTeam;
+            if (clickedTeam === 'grey' && gameState.swapped) {
+                console.log("Player team:", player.team);
+                // Use the previous turn state to determine which team benefits
+                const impededTeam = gameState.redTurn ? 'blue' : 'red'; // Opposite of current turn since turn was switched
+                Swal.fire({
+                    text: `A neutral card has been converted into a card of the ${impededTeam} team's color!`,
+                    icon: 'warning',
+                    confirmButtonText: player?.team != impededTeam ? "Alright!" : "That's a shame."
+                });
+            } else if (clickedTeam === 'black') {
+                setGameOver(true);
+                Swal.fire({
+                    text: `Game over! ${gameState.redTurn ? 'Red' : 'Blue'} team has lost!`,
+                    icon: player?.team === (gameState.redTurn ? 'red' : 'blue') ? 'error' : 'success',
+                    confirmButtonText: "Oh!"
+                });
             }
             if (gameState.redLeft === 0) {
+                setGameOver(true);
                 Swal.fire({
                     text: "Game over, the Red team has won!",
-                    icon: 'success',
+                    icon: player?.team === 'red' ? 'success' : 'error',
                     confirmButtonText: "Oh!"
                 });
             } else if (gameState.blueLeft === 0) {
+                setGameOver(true);
                 Swal.fire({
                     text: "Game over, the Blue team has won!",
-                    icon: 'success',
+                    icon: player?.team === 'blue' ? 'success' : 'error',
                     confirmButtonText: "Oh!"
                 });
             }
             else {
+                // Check if turn changed and clear right clicks if it did
+                const turnChanged = redTurn !== gameState.redTurn;
+                
                 setCards(gameState.cards);
                 setRedTurn(gameState.redTurn);
                 setRedLeft(gameState.redLeft);
                 setBlueLeft(gameState.blueLeft);
                 setClues(gameState.clues);
                 setActiveClueIndex(gameState.activeClueIndex);
+                
+                // If turn changed, clear all right clicks
+                if (turnChanged) {
+                    setCards(prevCards => prevCards.map(card => ({
+                        ...card,
+                        rightClicked: false
+                    })));
+                }
             }
         })
         return () => { socket.off("update game") }
-    }, [socket])
+    }, [socket, player])
 
     useEffect(() => {
         socket.on("card clicked", (index) => {
@@ -187,6 +210,11 @@ function Game() {
         e.preventDefault();    
         socket.emit("right clicked", index)
     }  
+
+    function handleNewGame() {
+        socket.emit("new game", room);
+        setGameOver(false);
+    }
     
     // Redirect to home if no room data
     if (!room) {
@@ -195,7 +223,7 @@ function Game() {
     
     return (
         <div className={`game-container ${theme}`}>
-            <SettingsPopup />
+            <SettingsPopup onNewGame={handleNewGame} />
             <div className= 'team red'>
                 <TeamPanel
                     color = "red"
@@ -215,9 +243,15 @@ function Game() {
                         onCardRightClick={handleCardRightClick}
                     />
                 </div>
-                <div className= 'clue'>
-                    <Clue clues={clues} activeClueIndex={activeClueIndex} />
-                </div>
+                {gameOver ? (
+                    <div className="game-over-message">
+                        <button onClick={handleNewGame}>NEW GAME</button>
+                    </div>
+                ) : (
+                    <div className= 'clue'>
+                        <Clue clues={clues} activeClueIndex={activeClueIndex} />
+                    </div>
+                )}
             </div>
             <div className= 'team blue'>
                 <TeamPanel
