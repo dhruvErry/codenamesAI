@@ -219,6 +219,12 @@ io.on('connection', (socket) => {
         game.activeClueIndex = -1;
         game.yellowClicks = 0;
         
+        // Reset all players' roles to null
+        game.players.forEach(player => {
+            player.team = null;
+            player.spy = null;
+        });
+        
         // Create new game
         createGame(room);
         
