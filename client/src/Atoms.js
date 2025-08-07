@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 const serverURL = process.env.REACT_APP_SERVER_URL;
 const socketAtom = atom(() => io(serverURL, { }));
 const themeAtom = atom('light'); // 'light' or 'dark'
+const connectionAtom = atom(false); // Track socket connection status
 
 const playerAtom = atom(null);
 
@@ -17,4 +18,4 @@ const gameOverAtom = atom(false);
 
 // const scoresAtom = atom({red: -1, blue: -1});
 
-export { socketAtom, themeAtom, playerAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, gameOverAtom };
+export { socketAtom, themeAtom, connectionAtom, playerAtom, cluesAtom, activeClueIndexAtom, redTurnAtom, redLeftAtom, blueLeftAtom, gameOverAtom };

@@ -1,11 +1,23 @@
 import { Link } from "react-router-dom";
-import { useAtomValue } from 'jotai';
-import { themeAtom } from '../Atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { socketAtom, themeAtom, connectionAtom } from '../Atoms';
+import { useEffect } from 'react';
 import ThemeToggle from './ThemeToggle';
 import './Home.css';
 
 function Home() {
     const theme = useAtomValue(themeAtom);
+    const socket = useAtomValue(socketAtom);
+    const setConnection = useSetAtom(connectionAtom);
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const isConnected = socket.connected;
+            console.log('Home - socket.connected:', isConnected);
+            setConnection(isConnected);
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [socket, setConnection]);
     
     return (
         <div className={`join-prompt-container ${theme}`}>
